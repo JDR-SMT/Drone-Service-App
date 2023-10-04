@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "6Nd1yDVBZ6wiDmnwdx5cs8TQ6hAwpzN2NL/SHx1CDxi1oeCFrG44kwz1RST4nQYEXuzw4zWGdwnhnQyiehl0Rw==",
+  "dgSpecHash": "o2krq6diZGsPqBxdUGl3PzvG0rFMDal3o/yxyqezmJteCz68feXx4UfN5spyz2YrQjEi6wRnQTzuNAehihTW8w==",
   "success": true,
   "projectFilePath": "C:\\- Obi\\OneDrive\\Code\\VS\\DroneServiceApp\\DroneServiceApp.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\obitr\\.nuget\\packages\\extended.wpf.toolkit\\4.5.1\\extended.wpf.toolkit.4.5.1.nupkg.sha512"
+  ],
   "logs": []
 }
