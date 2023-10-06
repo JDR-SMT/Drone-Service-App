@@ -232,15 +232,13 @@ namespace DroneServiceApp
             return true; // tag does not exist
         }
 
-        private bool ValidCost()
+        private bool ValidCost() // 00.00
         {
-            var regex = new Regex("^\\d\\d\\.\\d\\d$"); // 00.00
-
-            if (regex.IsMatch(TextBoxCost.Text)) // format correct
+            if (Regex.IsMatch(TextBoxCost.Text, "^\\d\\d\\.\\d\\d$")) // matches
             {
                 return true;
             }
-            else // format incorrect
+            else // does not match
             {
                 return false;
             }
