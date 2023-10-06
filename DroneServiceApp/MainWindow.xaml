@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="392" Width="754">
     <Grid>
-        <xctk:IntegerUpDown x:Name="IntegerUpDownTag" FormatString="C0" HorizontalAlignment="Left" Margin="10,23,0,0" Width="85" Height="18" VerticalAlignment="Top"/>
+        <xctk:IntegerUpDown x:Name="IntegerUpDownTag" FormatString="N0" Minimum="100" Maximum="900" Increment="10" Value="100" HorizontalAlignment="Left" Margin="10,23,0,0" Width="85" Height="18" VerticalAlignment="Top"/>
         <GroupBox Margin="10,59,0,0" Height="40" VerticalAlignment="Top" HorizontalAlignment="Left" Width="148">
             <StackPanel Height="30" Margin="0,5,0,0">
                 <RadioButton x:Name="RadioButtonRegular" Content="Regular" FontSize="10"/>
@@ -15,31 +15,31 @@
             </StackPanel>
         </GroupBox>
         <TextBox x:Name="TextBoxName" HorizontalAlignment="Left" Margin="10,117,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="148"/>
-        <TextBox x:Name="TextBoxCost" HorizontalAlignment="Left" Margin="10,277,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="85"/>
-        <TextBox x:Name="TextBoxProblem" HorizontalAlignment="Left" Margin="10,189,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="148" Height="70"/>
         <TextBox x:Name="TextBoxDrone" HorizontalAlignment="Left" Margin="10,153,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="148"/>
-        <Button x:Name="ButtonAdd" Content="Add" HorizontalAlignment="Left" Margin="10,303,0,0" Width="30" Height="20" VerticalAlignment="Top"/>
-        <Button x:Name="ButtonRemove" Content="Remove" HorizontalAlignment="Left" Margin="45,303,0,0" Width="50" Height="20" VerticalAlignment="Top"/>
-        <ListBox x:Name="ListBoxFinished" Margin="182,26,0,0" HorizontalAlignment="Left" Width="112" Height="297" VerticalAlignment="Top"/>
-        <ListView x:Name="ListViewExpress" Margin="318,26,10,0" Height="138" VerticalAlignment="Top">
+        <TextBox x:Name="TextBoxProblem" HorizontalAlignment="Left" Margin="10,189,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="148" Height="70"/>
+        <TextBox x:Name="TextBoxCost" HorizontalAlignment="Left" Margin="10,277,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="85"/>
+        <Button x:Name="ButtonAdd" Content="Add" HorizontalAlignment="Left" Margin="10,303,0,0" Width="30" Height="20" VerticalAlignment="Top" Click="ButtonAdd_Click"/>
+        <Button x:Name="ButtonRemove" Content="Remove" HorizontalAlignment="Left" Margin="45,303,0,0" Width="50" Height="20" VerticalAlignment="Top" Click="ButtonRemove_Click"/>
+        <ListBox x:Name="ListBoxFinished" Margin="182,26,0,0" HorizontalAlignment="Left" Width="112" Height="297" VerticalAlignment="Top" SelectionChanged="ListBoxFinished_SelectionChanged" MouseDoubleClick="ListBoxFinished_MouseDoubleClick"/>
+        <ListView x:Name="ListViewExpress" Margin="318,26,10,0" Height="138" VerticalAlignment="Top" SelectionChanged="ListViewExpress_SelectionChanged">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Tag" Width="40"/>
-                    <GridViewColumn Header="Name" Width="80"/>
-                    <GridViewColumn Header="Drone" Width="80"/>
-                    <GridViewColumn Header="Problem" Width="150"/>
-                    <GridViewColumn Header="Cost" Width="50"/>
+                    <GridViewColumn Header="Tag" DisplayMemberBinding="{Binding ExpressTag}" Width="40"/>
+                    <GridViewColumn Header="Name" DisplayMemberBinding="{Binding ExpressName}" Width="80"/>
+                    <GridViewColumn Header="Drone" DisplayMemberBinding="{Binding ExpressDrone}" Width="80"/>
+                    <GridViewColumn Header="Problem" DisplayMemberBinding="{Binding ExpressProblem}" Width="150"/>
+                    <GridViewColumn Header="Cost" DisplayMemberBinding="{Binding ExpressCost}" Width="50"/>
                 </GridView>
             </ListView.View>
         </ListView>
-        <ListView x:Name="ListViewRegular" Margin="318,185,10,0" Height="138" VerticalAlignment="Top">
+        <ListView x:Name="ListViewRegular" Margin="318,185,10,0" Height="138" VerticalAlignment="Top" SelectionChanged="ListViewRegular_SelectionChanged">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Tag" Width="40"/>
-                    <GridViewColumn Header="Name" Width="80"/>
-                    <GridViewColumn Header="Drone" Width="80"/>
-                    <GridViewColumn Header="Problem" Width="150"/>
-                    <GridViewColumn Header="Cost" Width="50"/>
+                    <GridViewColumn Header="Tag" DisplayMemberBinding="{Binding RegularTag}" Width="40"/>
+                    <GridViewColumn Header="Name" DisplayMemberBinding="{Binding RegularName}" Width="80"/>
+                    <GridViewColumn Header="Drone" DisplayMemberBinding="{Binding RegularDrone}" Width="80"/>
+                    <GridViewColumn Header="Problem" DisplayMemberBinding="{Binding RegularProblem}" Width="150"/>
+                    <GridViewColumn Header="Cost" DisplayMemberBinding="{Binding RegularCost}" Width="50"/>
                 </GridView>
             </ListView.View>
         </ListView>

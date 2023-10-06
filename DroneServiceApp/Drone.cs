@@ -27,7 +27,7 @@ namespace DroneServiceApp
         // display name and cost
         public string Display()
         {
-            return name + " " + cost;
+            return GetName() + " $" + GetCost();
         }
     }
 }
