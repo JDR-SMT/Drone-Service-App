@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
-        Title="MainWindow" Height="392" Width="775">
+        Title="MainWindow" Height="392" Width="802">
     <Grid>
         <xctk:IntegerUpDown x:Name="IntegerUpDownTag" FormatString="N0" Minimum="100" Maximum="900" Increment="10" Value="100" HorizontalAlignment="Left" Margin="10,23,0,0" Width="85" Height="18" VerticalAlignment="Top"/>
         <GroupBox Margin="10,59,0,0" Height="40" VerticalAlignment="Top" HorizontalAlignment="Left" Width="148">
@@ -20,8 +20,7 @@
         <TextBox x:Name="TextBoxCost" HorizontalAlignment="Left" Margin="10,277,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="85"/>
         <Button x:Name="ButtonAdd" Content="Add" HorizontalAlignment="Left" Margin="10,303,0,0" Width="30" Height="20" VerticalAlignment="Top" Click="ButtonAdd_Click"/>
         <Button x:Name="ButtonRemove" Content="Remove" HorizontalAlignment="Left" Margin="45,303,0,0" Width="50" Height="20" VerticalAlignment="Top" Click="ButtonRemove_Click"/>
-        <ListBox x:Name="ListBoxFinished" Margin="617,26,10,0" Height="297" VerticalAlignment="Top" SelectionChanged="ListBoxFinished_SelectionChanged" MouseDoubleClick="ListBoxFinished_MouseDoubleClick"/>
-        <ListView x:Name="ListViewExpress" Margin="182,26,0,0" Height="138" VerticalAlignment="Top" SelectionChanged="ListViewExpress_SelectionChanged" HorizontalAlignment="Left" Width="411">
+        <ListView x:Name="ListViewExpress" Margin="182,26,0,0" Height="138" VerticalAlignment="Top" SelectionChanged="List_SelectionChanged" HorizontalAlignment="Left" Width="411">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Tag" DisplayMemberBinding="{Binding ExpressTag}" Width="40"/>
@@ -32,17 +31,18 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        <ListView x:Name="ListViewRegular" Margin="0,185,0,0" Height="138" VerticalAlignment="Top" SelectionChanged="ListViewRegular_SelectionChanged" HorizontalAlignment="Center" Width="411">
+        <ListView x:Name="ListViewRegular" Margin="182,185,0,0" Height="138" VerticalAlignment="Top" SelectionChanged="List_SelectionChanged" HorizontalAlignment="Left" Width="411">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Tag" DisplayMemberBinding="{Binding RegularTag}" Width="40"/>
-                    <GridViewColumn Header="Name" DisplayMemberBinding="{Binding RegularName}" Width="105"/>
-                    <GridViewColumn Header="Drone" DisplayMemberBinding="{Binding RegularDrone}" Width="105"/>
+                    <GridViewColumn Header="Name" DisplayMemberBinding="{Binding RegularName}" Width="110"/>
+                    <GridViewColumn Header="Drone" DisplayMemberBinding="{Binding RegularDrone}" Width="100"/>
                     <GridViewColumn Header="Problem" DisplayMemberBinding="{Binding RegularProblem}" Width="100"/>
                     <GridViewColumn Header="Cost" DisplayMemberBinding="{Binding RegularCost}" Width="50"/>
                 </GridView>
             </ListView.View>
         </ListView>
+        <ListBox x:Name="ListBoxFinished" Margin="617,26,10,0" Height="297" VerticalAlignment="Top" SelectionChanged="List_SelectionChanged" MouseDoubleClick="ListBoxFinished_MouseDoubleClick"/>
         <StatusBar Height="25" VerticalAlignment="Bottom">
             <TextBox x:Name="StatusBarInfo" BorderBrush="#FFF1EDED" Width="734" Margin="6,0,10,0" Background="#FFF1EDED"/>
         </StatusBar>

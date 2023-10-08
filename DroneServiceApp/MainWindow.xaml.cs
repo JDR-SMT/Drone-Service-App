@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
-using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
+using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace DroneServiceApp
 {
@@ -67,7 +68,34 @@ namespace DroneServiceApp
             }
         }
 
-        private void ListViewRegular_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        private void List_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.AddedItems.Count != 0) // item is selected
+            {
+                if (ListViewRegular == sender) // display regular item
+                {
+                    ListViewExpress.SelectedItems.Clear();
+                    ListBoxFinished.SelectedItem = null;
+                    ListViewRegular_SelectionChanged(sender, e);
+                }
+
+                if (ListViewExpress == sender) // display express item
+                {
+                    ListViewRegular.SelectedItems.Clear();
+                    ListBoxFinished.SelectedItem = null;
+                    ListViewExpress_SelectionChanged(sender, e);
+                }
+
+                if (ListBoxFinished == sender) // display finished item
+                {
+                    ListViewRegular.SelectedItems.Clear();
+                    ListViewExpress.SelectedItems.Clear();
+                    ListBoxFinished_SelectionChanged(sender, e);
+                }
+            }
+        }
+        
+        private void ListViewRegular_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             try // output selected item variables in boxes
             {
@@ -84,16 +112,16 @@ namespace DroneServiceApp
                 return;
             }
         }
-        private void ListViewExpress_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        private void ListViewExpress_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             try // output selected item variables in boxes
             {
-                IntegerUpDownTag.Value = ExpressService.ElementAt(ListViewRegular.SelectedIndex).getTag();
+                IntegerUpDownTag.Value = ExpressService.ElementAt(ListViewExpress.SelectedIndex).getTag();
                 SetServicePriority();
-                TextBoxName.Text = ExpressService.ElementAt(ListViewRegular.SelectedIndex).GetName();
-                TextBoxDrone.Text = ExpressService.ElementAt(ListViewRegular.SelectedIndex).GetDrone();
-                TextBoxProblem.Text = ExpressService.ElementAt(ListViewRegular.SelectedIndex).GetProblem();
-                TextBoxCost.Text = ExpressService.ElementAt(ListViewRegular.SelectedIndex).GetCost().ToString();
+                TextBoxName.Text = ExpressService.ElementAt(ListViewExpress.SelectedIndex).GetName();
+                TextBoxDrone.Text = ExpressService.ElementAt(ListViewExpress.SelectedIndex).GetDrone();
+                TextBoxProblem.Text = ExpressService.ElementAt(ListViewExpress.SelectedIndex).GetProblem();
+                TextBoxCost.Text = ExpressService.ElementAt(ListViewExpress.SelectedIndex).GetCost().ToString();
             }
             catch (ArgumentOutOfRangeException) // selected item is changed or deleted
             {
@@ -101,8 +129,8 @@ namespace DroneServiceApp
                 return;
             }
         }
-
-        private void ListBoxFinished_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        
+        private void ListBoxFinished_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             try // output selected item variables in display boxes
             {
@@ -252,12 +280,12 @@ namespace DroneServiceApp
             {
                 MessageBoxResult result = MessageBox.Show("Mark this service as finished?", "", MessageBoxButton.YesNo); // prompt
 
-                if (result == MessageBoxResult.Yes && ListViewRegular.SelectedIndex >= 0) // yes on regular
+                if (result == MessageBoxResult.Yes && ListViewRegular.SelectedIndex == 0) // yes on regular
                 {
                     FinishedList.Add(RegularService.Dequeue()); // add dequeued object to FinishedList
                     DisplayRegular();
                 }
-                else if (result == MessageBoxResult.Yes && ListViewExpress.SelectedIndex >= 0) // yes on express
+                else if (result == MessageBoxResult.Yes && ListViewExpress.SelectedIndex == 0) // yes on express
                 {
                     FinishedList.Add(ExpressService.Dequeue()); // add dequeued object to FinishedList
                     DisplayExpress();
@@ -280,7 +308,7 @@ namespace DroneServiceApp
             }
         }
 
-        private void ListBoxFinished_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void ListBoxFinished_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             if (ListBoxFinished.SelectedIndex >= 0) // item selected
             {
