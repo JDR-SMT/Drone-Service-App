@@ -52,7 +52,7 @@
         <Label Content="Drone" HorizontalAlignment="Left" Margin="10,140,0,0" VerticalAlignment="Top" Padding="0,0,0,0" FontSize="10"/>
         <Label Content="Problem" HorizontalAlignment="Left" Margin="10,176,0,0" VerticalAlignment="Top" Padding="0,0,0,0" FontSize="10"/>
         <Label Content="Cost" HorizontalAlignment="Left" Margin="10,264,0,0" VerticalAlignment="Top" Padding="0,0,0,0" FontSize="10"/>
-        <Label Content="Finished" HorizontalAlignment="Left" Margin="620,10,0,0" VerticalAlignment="Top" Padding="0,0,0,0"/>
+        <Label Content="Finished" HorizontalAlignment="Left" Margin="617,10,0,0" VerticalAlignment="Top" Padding="0,0,0,0"/>
         <Label Content="Express" HorizontalAlignment="Left" Margin="182,10,0,0" VerticalAlignment="Top" Padding="0,0,0,0"/>
         <Label Content="Regular" HorizontalAlignment="Left" Margin="182,169,0,0" VerticalAlignment="Top" Padding="0,0,0,0"/>
     </Grid>

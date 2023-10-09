@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Threading;
 
 namespace DroneServiceApp
 {
@@ -22,6 +23,7 @@ namespace DroneServiceApp
         Queue<Drone> RegularService = new Queue<Drone>();
         Queue<Drone> ExpressService = new Queue<Drone>();
         List<Drone> FinishedList = new List<Drone>();
+        DispatcherTimer timer = new DispatcherTimer();
 
         #region Utility
         private void DisplayRegular()
@@ -94,7 +96,7 @@ namespace DroneServiceApp
                 }
             }
         }
-        
+
         private void ListViewRegular_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             try // output selected item variables in boxes
@@ -129,11 +131,12 @@ namespace DroneServiceApp
                 return;
             }
         }
-        
+
         private void ListBoxFinished_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             try // output selected item variables in display boxes
             {
+                IntegerUpDownTag.Value = null;
                 TextBoxName.Text = FinishedList[ListBoxFinished.SelectedIndex].GetName();
                 TextBoxDrone.Text = FinishedList[ListBoxFinished.SelectedIndex].GetDrone();
                 TextBoxProblem.Text = FinishedList[ListBoxFinished.SelectedIndex].GetProblem();
@@ -155,6 +158,20 @@ namespace DroneServiceApp
             TextBoxDrone.Clear();
             TextBoxProblem.Clear();
             TextBoxCost.Clear();
+        }
+
+        private void SetStatusBarInfo(string text) // sets statusbar and starts timer (10s)
+        {
+            StatusBarInfo.Text = text;
+            timer.Interval = TimeSpan.FromSeconds(10);
+            timer.Tick += new EventHandler(TimerTick);
+            timer.Start();
+        }
+
+        private void TimerTick(object sender, EventArgs e) // clears statusbar and stops timer
+        {
+            StatusBarInfo.Text = "";
+            timer.Stop();
         }
         #endregion
 
@@ -203,15 +220,15 @@ namespace DroneServiceApp
             }
             else if (!ValidTag()) // invalid tag
             {
-                StatusBarInfo.Text = "Tag number is already taken. Please choose another number.";
+                SetStatusBarInfo("Tag number is already taken. Please choose another number.");
             }
             else if (!ValidCost()) // invalid cost
             {
-                StatusBarInfo.Text = "Please enter a price of two digits and two decimals.";
+                SetStatusBarInfo("Please enter a price of two digits and two decimals.");
             }
             else // empty input
             {
-                StatusBarInfo.Text = "Please complete all fields.";
+                SetStatusBarInfo("Please complete all fields.");
             }
         }
 
@@ -296,13 +313,15 @@ namespace DroneServiceApp
             }
             else if (ListViewRegular.SelectedIndex >= 1 || ListViewExpress.SelectedIndex >= 1) // top item not selected
             {
-                StatusBarInfo.Text = "Services must be completed in order.";
+                SetStatusBarInfo("Services must be completed in order.");
+                ListViewRegular.SelectedItems.Clear();
+                ListViewExpress.SelectedItems.Clear();
                 Clear();
                 return;
             }
             else // no item selected
             {
-                StatusBarInfo.Text = "Please select a service to mark as finished.";
+                SetStatusBarInfo("Please select a service to mark as finished.");
                 Clear();
                 return;
             }
@@ -323,7 +342,7 @@ namespace DroneServiceApp
             }
             else // no item selected
             {
-                StatusBarInfo.Text = "Please select a service to mark as paid.";
+                SetStatusBarInfo("Please select a service to mark as paid.");
                 Clear();
                 return;
             }
