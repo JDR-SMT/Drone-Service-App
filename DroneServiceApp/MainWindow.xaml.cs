@@ -26,115 +26,92 @@ namespace DroneServiceApp
         DispatcherTimer timer = new DispatcherTimer();
 
         #region Utility
-        private void DisplayRegular()
+        private void DisplayService(Queue<Drone> Queue, ListView ListView)
         {
-            ListViewRegular.Items.Clear(); // clear all items
+            // clear all items
+            ListView.Items.Clear();
 
-            foreach (var drone in RegularService) // add item variables to associated columns
+            // add item variables to associated columns
+            foreach (var drone in Queue)
             {
-                ListViewRegular.Items.Add(new
+                ListView.Items.Add(new
                 {
-                    RegularTag = drone.getTag(),
-                    RegularName = drone.GetName(),
-                    RegularDrone = drone.GetDrone(),
-                    RegularProblem = drone.GetProblem(),
-                    RegularCost = drone.GetCost()
-                });
-            }
-        }
-
-        private void DisplayExpress()
-        {
-            ListViewExpress.Items.Clear(); // clear all items
-
-            foreach (var drone in ExpressService) // add item variables to associated columns
-            {
-                ListViewExpress.Items.Add(new
-                {
-                    ExpressTag = drone.getTag(),
-                    ExpressName = drone.GetName(),
-                    ExpressDrone = drone.GetDrone(),
-                    ExpressProblem = drone.GetProblem(),
-                    ExpressCost = drone.GetCost()
+                    Tag = drone.getTag(),
+                    Name = drone.GetName(),
+                    Drone = drone.GetDrone(),
+                    Problem = drone.GetProblem(),
+                    Cost = drone.GetCost()
                 });
             }
         }
 
         private void DisplayFinished()
         {
-            ListBoxFinished.Items.Clear(); // clear all items
+            // clear all items
+            ListBoxFinished.Items.Clear();
 
-            foreach (var drone in FinishedList) // display item name and cost
+            // display item name and cost
+            foreach (var drone in FinishedList)
             {
-                ListBoxFinished.Items.Add(drone.Display());
+                ListBoxFinished.Items.Add(drone.ToString());
             }
         }
 
         private void List_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (e.AddedItems.Count != 0) // item is selected
+            // item is selected
+            if (e.AddedItems.Count != 0)
             {
-                if (ListViewRegular == sender) // display regular item
+                // display regular item
+                if (ListViewRegular == sender)
                 {
-                    ListViewExpress.SelectedItems.Clear();
-                    ListBoxFinished.SelectedItem = null;
-                    ListViewRegular_SelectionChanged(sender, e);
+                    ClearSelection(ListViewExpress);
+                    ClearSelection(ListBoxFinished);
+                    ListView_SelectionChanged(RegularService, ListViewRegular);
                 }
 
-                if (ListViewExpress == sender) // display express item
+                // display express item
+                if (ListViewExpress == sender)
                 {
-                    ListViewRegular.SelectedItems.Clear();
-                    ListBoxFinished.SelectedItem = null;
-                    ListViewExpress_SelectionChanged(sender, e);
+                    ClearSelection(ListViewRegular);
+                    ClearSelection(ListBoxFinished);
+                    ListView_SelectionChanged(ExpressService, ListViewExpress);
                 }
 
-                if (ListBoxFinished == sender) // display finished item
+                // display finished item
+                if (ListBoxFinished == sender)
                 {
-                    ListViewRegular.SelectedItems.Clear();
-                    ListViewExpress.SelectedItems.Clear();
-                    ListBoxFinished_SelectionChanged(sender, e);
+                    ClearSelection(ListViewRegular);
+                    ClearSelection(ListViewExpress);
+                    ListBoxFinished_SelectionChanged();
                 }
             }
         }
 
-        private void ListViewRegular_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void ListView_SelectionChanged(Queue<Drone> Queue, ListView ListView)
         {
-            try // output selected item variables in boxes
+            // output selected item variables in boxes
+            try
             {
-                IntegerUpDownTag.Value = RegularService.ElementAt(ListViewRegular.SelectedIndex).getTag();
+                IntegerUpDownTag.Value = Queue.ElementAt(ListView.SelectedIndex).getTag();
                 SetServicePriority();
-                TextBoxName.Text = RegularService.ElementAt(ListViewRegular.SelectedIndex).GetName();
-                TextBoxDrone.Text = RegularService.ElementAt(ListViewRegular.SelectedIndex).GetDrone();
-                TextBoxProblem.Text = RegularService.ElementAt(ListViewRegular.SelectedIndex).GetProblem();
-                TextBoxCost.Text = RegularService.ElementAt(ListViewRegular.SelectedIndex).GetCost().ToString();
+                TextBoxName.Text = Queue.ElementAt(ListView.SelectedIndex).GetName();
+                TextBoxDrone.Text = Queue.ElementAt(ListView.SelectedIndex).GetDrone();
+                TextBoxProblem.Text = Queue.ElementAt(ListView.SelectedIndex).GetProblem();
+                TextBoxCost.Text = Queue.ElementAt(ListView.SelectedIndex).GetCost().ToString();
             }
-            catch (ArgumentOutOfRangeException) // selected item is changed or deleted
+            // selected item is changed or deleted
+            catch (ArgumentOutOfRangeException)
             {
-                Clear();
-                return;
-            }
-        }
-        private void ListViewExpress_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            try // output selected item variables in boxes
-            {
-                IntegerUpDownTag.Value = ExpressService.ElementAt(ListViewExpress.SelectedIndex).getTag();
-                SetServicePriority();
-                TextBoxName.Text = ExpressService.ElementAt(ListViewExpress.SelectedIndex).GetName();
-                TextBoxDrone.Text = ExpressService.ElementAt(ListViewExpress.SelectedIndex).GetDrone();
-                TextBoxProblem.Text = ExpressService.ElementAt(ListViewExpress.SelectedIndex).GetProblem();
-                TextBoxCost.Text = ExpressService.ElementAt(ListViewExpress.SelectedIndex).GetCost().ToString();
-            }
-            catch (ArgumentOutOfRangeException) // selected item is changed or deleted
-            {
-                Clear();
+                ClearDisplay();
                 return;
             }
         }
 
-        private void ListBoxFinished_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void ListBoxFinished_SelectionChanged()
         {
-            try // output selected item variables in display boxes
+            // output selected item variables in display boxes
+            try
             {
                 IntegerUpDownTag.Value = null;
                 TextBoxName.Text = FinishedList[ListBoxFinished.SelectedIndex].GetName();
@@ -142,14 +119,16 @@ namespace DroneServiceApp
                 TextBoxProblem.Text = FinishedList[ListBoxFinished.SelectedIndex].GetProblem();
                 TextBoxCost.Text = FinishedList[ListBoxFinished.SelectedIndex].GetCost().ToString();
             }
-            catch (ArgumentOutOfRangeException) // selected item is changed or deleted
+            // selected item is changed or deleted
+            catch (ArgumentOutOfRangeException)
             {
-                Clear();
+                ClearDisplay();
                 return;
             }
         }
 
-        private void Clear() // clear all display boxes
+        // clear all display boxes
+        private void ClearDisplay()
         {
             IntegerUpDownTag.Value = IntegerUpDownTag.Minimum;
             RadioButtonRegular.IsChecked = false;
@@ -160,7 +139,20 @@ namespace DroneServiceApp
             TextBoxCost.Clear();
         }
 
-        private void SetStatusBarInfo(string text) // sets statusbar and starts timer (10s)
+        // clear listview
+        private void ClearSelection(ListView ListView)
+        {
+            ListView.SelectedItems.Clear();
+        }
+
+        // clear listbox
+        private void ClearSelection(ListBox ListBox)
+        {
+            ListBoxFinished.SelectedItem = null;
+        }
+
+        // sets statusbar and starts timer (10s)
+        private void SetStatusBarInfo(string text)
         {
             StatusBarInfo.Text = text;
             timer.Interval = TimeSpan.FromSeconds(10);
@@ -168,7 +160,8 @@ namespace DroneServiceApp
             timer.Start();
         }
 
-        private void TimerTick(object sender, EventArgs e) // clears statusbar and stops timer
+        // clears statusbar and stops timer
+        private void TimerTick(object sender, EventArgs e)
         {
             StatusBarInfo.Text = "";
             timer.Stop();
@@ -176,7 +169,7 @@ namespace DroneServiceApp
         #endregion
 
         #region Service Getter & Setter
-        private string GetServicePriority() // return value from selected radio button
+        private string GetServicePriority()
         {
             string selected = "";
 
@@ -189,11 +182,14 @@ namespace DroneServiceApp
                 selected = (string)RadioButtonExpress.Content;
             }
 
+            // string from selected radio button
             return selected;
         }
 
-        private void SetServicePriority() // check radio button depending on selected ListView
+
+        private void SetServicePriority()
         {
+            // check radio button depending on selected ListView
             if (ListViewRegular.SelectedIndex >= 0)
             {
                 RadioButtonRegular.IsChecked = true;
@@ -208,7 +204,8 @@ namespace DroneServiceApp
         #region Add
         private void ButtonAdd_Click(object sender, RoutedEventArgs e)
         {
-            if (ValidTag() && ValidCost() // valid tag and cost, all inputs completed
+            // valid tag and cost, all inputs completed
+            if (ValidTag() && ValidCost()
                 && (RadioButtonRegular.IsChecked == true || RadioButtonExpress.IsChecked == true)
                 && !string.IsNullOrWhiteSpace(TextBoxName.Text)
                 && !string.IsNullOrWhiteSpace(TextBoxDrone.Text)
@@ -216,17 +213,23 @@ namespace DroneServiceApp
                 && !string.IsNullOrWhiteSpace(TextBoxCost.Text))
             {
                 AddNewItem();
-                Clear();
+                ClearSelection(ListViewRegular);
+                ClearSelection(ListViewExpress);
+                ClearSelection(ListBoxFinished);
+                ClearDisplay();
             }
-            else if (!ValidTag()) // invalid tag
+            // invalid tag
+            else if (!ValidTag())
             {
                 SetStatusBarInfo("Tag number is already taken. Please choose another number.");
             }
-            else if (!ValidCost()) // invalid cost
+            // invalid cost
+            else if (!ValidCost())
             {
                 SetStatusBarInfo("Please enter a price of two digits and two decimals.");
             }
-            else // empty input
+            // empty input
+            else
             {
                 SetStatusBarInfo("Please complete all fields.");
             }
@@ -234,41 +237,49 @@ namespace DroneServiceApp
 
         private void AddNewItem()
         {
-            Drone addDrone = new Drone(); // create new Drone object and set variables
+            // create new Drone object and set variables
+            Drone addDrone = new Drone();
             addDrone.SetTag((int)IntegerUpDownTag.Value);
             addDrone.SetName(TextBoxName.Text);
             addDrone.SetDrone(TextBoxDrone.Text);
             addDrone.SetProblem(TextBoxProblem.Text);
-            decimal.TryParse(TextBoxCost.Text, out decimal resultCost); // return decimal cost
+            decimal.TryParse(TextBoxCost.Text, out decimal resultCost);
 
-            switch (GetServicePriority()) // check priority
+            // check priority
+            switch (GetServicePriority())
             {
                 case "Regular":
+                    // set cost and add object to RegularService queue
                     addDrone.SetCost(resultCost);
-                    RegularService.Enqueue(addDrone); // add object to RegularService queue
-                    DisplayRegular();
+                    RegularService.Enqueue(addDrone);
+                    DisplayService(RegularService, ListViewRegular);
                     break;
                 case "Express":
-                    addDrone.SetCost(decimal.Round(resultCost *= 1.15M, 2)); // increase cost by 15%
-                    ExpressService.Enqueue(addDrone); // add object to ExpressService queue
-                    DisplayExpress();
+                    // increase cost by 15% and add object to ExpressService queue
+                    addDrone.SetCost(decimal.Round(resultCost *= 1.15M, 2));
+                    ExpressService.Enqueue(addDrone);
+                    DisplayService(ExpressService, ListViewExpress);
                     break;
             }
         }
 
         private bool ValidTag()
         {
-            foreach (var regularDrone in RegularService) // search RegularService
+            // search RegularService
+            foreach (var regularDrone in RegularService)
             {
-                if (regularDrone.getTag() == (int)IntegerUpDownTag.Value) // tag exists
+                // tag exists
+                if (regularDrone.getTag() == (int)IntegerUpDownTag.Value)
                 {
                     return false;
                 }
             }
 
-            foreach (var expressDrone in ExpressService) // search ExpressService
+            // search ExpressService
+            foreach (var expressDrone in ExpressService)
             {
-                if (expressDrone.getTag() == (int)IntegerUpDownTag.Value) // tag exists
+                // tag exists
+                if (expressDrone.getTag() == (int)IntegerUpDownTag.Value)
                 {
                     return false;
                 }
@@ -277,13 +288,16 @@ namespace DroneServiceApp
             return true; // tag does not exist
         }
 
-        private bool ValidCost() // 00.00
+        // 00.00
+        private bool ValidCost()
         {
-            if (Regex.IsMatch(TextBoxCost.Text, "^\\d\\d\\.\\d\\d$")) // matches
+            // matches
+            if (Regex.IsMatch(TextBoxCost.Text, "^\\d\\d\\.\\d\\d$"))
             {
                 return true;
             }
-            else // does not match
+            // does not match
+            else
             {
                 return false;
             }
@@ -293,57 +307,68 @@ namespace DroneServiceApp
         #region Remove
         private void ButtonRemove_Click(object sender, RoutedEventArgs e)
         {
-            if (ListViewRegular.SelectedIndex == 0 || ListViewExpress.SelectedIndex == 0) // top item selected
+            // prompt
+            MessageBoxResult result = MessageBox.Show("Mark this service as finished?", "", MessageBoxButton.YesNo);
+
+            // top item selected on regular
+            if (result == MessageBoxResult.Yes && ListViewRegular.SelectedIndex == 0)
             {
-                MessageBoxResult result = MessageBox.Show("Mark this service as finished?", "", MessageBoxButton.YesNo); // prompt
-
-                if (result == MessageBoxResult.Yes && ListViewRegular.SelectedIndex == 0) // yes on regular
-                {
-                    FinishedList.Add(RegularService.Dequeue()); // add dequeued object to FinishedList
-                    DisplayRegular();
-                }
-                else if (result == MessageBoxResult.Yes && ListViewExpress.SelectedIndex == 0) // yes on express
-                {
-                    FinishedList.Add(ExpressService.Dequeue()); // add dequeued object to FinishedList
-                    DisplayExpress();
-                }
-
-                DisplayFinished();
-                Clear();
+                ProcessRemove(RegularService, ListViewRegular);
             }
-            else if (ListViewRegular.SelectedIndex >= 1 || ListViewExpress.SelectedIndex >= 1) // top item not selected
+            // top item selected on express
+            else if (result == MessageBoxResult.Yes && ListViewExpress.SelectedIndex == 0)
+            {
+                ProcessRemove(ExpressService, ListViewExpress);
+            }
+            // top item not selected
+            else if (ListViewRegular.SelectedIndex >= 1 || ListViewExpress.SelectedIndex >= 1)
             {
                 SetStatusBarInfo("Services must be completed in order.");
-                ListViewRegular.SelectedItems.Clear();
-                ListViewExpress.SelectedItems.Clear();
-                Clear();
+                ClearSelection(ListViewRegular);
+                ClearSelection(ListViewExpress);
+                ClearDisplay();
                 return;
             }
-            else // no item selected
+            // no item selected
+            else
             {
                 SetStatusBarInfo("Please select a service to mark as finished.");
-                Clear();
+                ClearDisplay();
                 return;
             }
         }
 
+        private void ProcessRemove(Queue<Drone> Queue, ListView ListView)
+        {
+            // add dequeued object to FinishedList
+            FinishedList.Add(Queue.Dequeue());
+            DisplayService(Queue, ListView);
+            DisplayFinished();
+            ClearDisplay();
+        }
+
         private void ListBoxFinished_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            if (ListBoxFinished.SelectedIndex >= 0) // item selected
+            // item selected
+            if (ListBoxFinished.SelectedIndex >= 0)
             {
-                MessageBoxResult result = MessageBox.Show("Mark this service as paid?", "", MessageBoxButton.YesNo); // prompt
+                // prompt
+                MessageBoxResult result = MessageBox.Show("Mark this service as paid?", "", MessageBoxButton.YesNo);
 
-                if (result == MessageBoxResult.Yes) // yes
+                // yes
+                if (result == MessageBoxResult.Yes)
                 {
-                    FinishedList.RemoveAt(ListBoxFinished.SelectedIndex); // remove item from FinishedList
-                    Clear();
+                    // remove item from FinishedList
+                    FinishedList.RemoveAt(ListBoxFinished.SelectedIndex);
                     DisplayFinished();
+                    ClearDisplay();
                 }
             }
-            else // no item selected
+            // no item selected
+            else
             {
                 SetStatusBarInfo("Please select a service to mark as paid.");
-                Clear();
+                ClearDisplay();
                 return;
             }
         }
